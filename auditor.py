@@ -19,16 +19,31 @@ while True:
     if user_input.lower() == "quit":
         break       # exits loop and goes to audit report printing.
 
-    # Requirement 4 & 5: Validate numbers and reject negatives / dirty text
+
+    # Requirement 3 & 4: Process positive integer values
     if user_input.isdigit():
-        pass  # Will process in next step
+        # Requirement 3: Convert string input to integer
+        quantity = int(user_input)
+
+        # Requirement 6: Manage State - Keep running total
+        inventory = inventory + quantity
+        print("Accepted:", quantity, "units. Current total:", inventory)
+
+        # Requirement 7: Trigger Overstock Alert (> 500 units)
+        if inventory > 500:
+            print("ALERT: Overstock limit exceeded (> 500)! Halting process.")
+            break
+
+    # Requirement 4 & 5: Handle invalid inputs
     else:
-        # Requirement 5: Reject negative numbers
         if user_input.startswith("-"):
             print("Error: Negative numbers are not allowed.")
         else:
-            # Requirement 4: Reject non-numeric input (e.g. 'ten')
             print("Error: Invalid entry. Please enter whole numbers only.")
         
-        # Track failed entry
         failed_entries = failed_entries + 1
+
+# Requirement 8: Final Audit Reporting
+print("\n--- Final Audit Report ---")
+print("Total Units Processed:", inventory)
+print("Number of Failed/Rejected Entries:", failed_entries)

@@ -19,3 +19,16 @@ while True:
     if user_input.lower() == "quit":
         break       # exits loop and goes to audit report printing.
 
+    # Requirement 4 & 5: Validate numbers and reject negatives / dirty text
+    if user_input.isdigit():
+        pass  # Will process in next step
+    else:
+        # Requirement 5: Reject negative numbers
+        if user_input.startswith("-"):
+            print("Error: Negative numbers are not allowed.")
+        else:
+            # Requirement 4: Reject non-numeric input (e.g. 'ten')
+            print("Error: Invalid entry. Please enter whole numbers only.")
+        
+        # Track failed entry
+        failed_entries = failed_entries + 1

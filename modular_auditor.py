@@ -1,49 +1,20 @@
 # ==============================================================================
-# INF1103 Lab 2: Smart Inventory Auditor
-# File: auditor.py
+# inf1103 lab 3: modular design
+# file: modular_auditor.py
 # ==============================================================================
 
-# Requirement 1: Initialize the inventory to zero at the start.
-# We also initialize a counter to track invalid/rejected user inputs.
-inventory = 0
-failed_entries = 0
+# get_valid_input() > returns int or quit string
+def get_valid_input():
+    str_input = input("Type 'quit' to exit. Enter stock quantity: ").strip()
 
-print("=== Smart Inventory Auditor Initialized ===")
+    if str_input.lower() == "quit":
+        return "quit"
 
-# Requirement 2: Run in a continuous loop until the user types 'quit'
-while True:
-    # Use .strip() to remove accidental spaces around the input
-    user_input = input("Type 'quit' to exit. Enter stock quantity: ").strip()
-    
-    # Requirement 2: Check for exit condition
-    if user_input.lower() == "quit":
-        break       # exits loop and goes to audit report printing.
-
-
-    # Requirement 3 & 4: Process positive integer values
-    if user_input.isdigit():
-        # Requirement 3: Convert string input to integer
-        quantity = int(user_input)
-
-        # Requirement 6: Manage State - Keep running total
-        inventory = inventory + quantity
-        print("Accepted:", quantity, "units. Current total:", inventory)
-
-        # Requirement 7: Trigger Overstock Alert (> 500 units)
-        if inventory > 500:
-            print("ALERT: Overstock limit exceeded (> 500)! Halting process.")
-            break
-
-    # Requirement 4 & 5: Handle invalid inputs
+    if str_input.isdigit():
+        return int(str_input)
     else:
-        if user_input.startswith("-"):
+        if str_input.startswith("-"):
             print("Error: Negative numbers are not allowed.")
         else:
             print("Error: Invalid entry. Please enter whole numbers only.")
-        
-        failed_entries = failed_entries + 1
-
-# Requirement 8: Final Audit Reporting
-print("\n--- Final Audit Report ---")
-print("Total Units Processed:", inventory)
-print("Number of Failed/Rejected Entries:", failed_entries)
+        return ""

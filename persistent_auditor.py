@@ -1,7 +1,7 @@
 # ==============================================================================
 # INF1103 Lab 4: Data Persistence
 # File: persistent_auditor.py
-# Phase b: After tracking history list
+# Phase c: After save_inventory() is implemented and verified
 # ==============================================================================
 
 def get_valid_input():
@@ -51,8 +51,6 @@ def load_inventory(filename):
         total = int(lines[0])
         history = []
         for line in lines[1:]:
-            # we skips index 0 / total 
-            # start:end - leaving blank, means to start from index 1 all the way to the end
             history.append(int(line))
 
         return total, history
@@ -66,11 +64,27 @@ def load_inventory(filename):
         return 0, []
 
 
+def save_inventory(filename, total, history):
+    """
+    Saves the final running total and transaction history back to disk.
+    Line 1: Grand total
+    Following lines: Each individual transaction
+    """
+    with open(filename, "w") as file:
+        file.write(str(total) + "\n")
+        for amount in history:
+            file.write(str(amount) + "\n")
+
+    print(f"Order successfully saved to {filename}")
+
+
 def main():
     print("=== Smart Inventory Auditor Initialized (Persistent) ===")
 
-    # Load starting total and history list
-    inventory, history = load_inventory("inventory.txt")
+    filename = "inventory.txt"
+
+    # 1. Read existing data on startup
+    inventory, history = load_inventory(filename)
     failed_entries = 0
 
     print("Current starting inventory:", inventory)
@@ -80,6 +94,8 @@ def main():
         entry = get_valid_input()
 
         if entry == "quit":
+            # 2. Write-back to disk when user exits
+            save_inventory(filename, inventory, history)
             break
         elif entry == "":
             failed_entries = failed_entries + 1
@@ -92,7 +108,7 @@ def main():
 
             print("Accepted:", entry, "units. Current total:", inventory, "Tax:", tax)
 
-    # Display final report including the tracked history list
+    # 3. Final report
     generate_report(inventory, failed_entries, history)
 
 

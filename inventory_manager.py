@@ -5,6 +5,13 @@
 import json
 import os
 
+def save_inventory(filename, inventory):
+    """Save inventory to a JSON file."""
+
+    with open(filename, "w") as file:
+        json.dump(inventory, file, indent=4)
+
+    print("Inventory saved successfully.")
 
 def load_inventory(filename):
     """Load inventory from a JSON file."""
@@ -117,7 +124,42 @@ def main():
 
     inventory = load_inventory(filename)
 
-    display_all(inventory)
+    while True:
+
+        print("\n----------- MENU -----------")
+        print("1. Display All Products")
+        print("2. Add Product")
+        print("3. Update Stock")
+        print("4. Search Product")
+        print("5. Save Inventory")
+        print("6. Exit")
+        print("----------------------------")
+
+        choice = input("Enter option: ").strip()
+
+        if choice == "1":
+            display_all(inventory)
+
+        elif choice == "2":
+            add_product(inventory)
+
+        elif choice == "3":
+            update_stock(inventory)
+
+        elif choice == "4":
+            search_product(inventory)
+
+        elif choice == "5":
+            save_inventory(filename, inventory)
+
+        elif choice == "6":
+            save_inventory(filename, inventory)
+            print("Thank you for using Inventory Management System.")
+            print("Program terminated.")
+            break
+
+        else:
+            print("Invalid option. Please choose 1-6.")
 
 
 if __name__ == "__main__":

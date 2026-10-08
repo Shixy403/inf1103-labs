@@ -2,6 +2,29 @@
 # INF1103 Lab 5: Data Manipulation
 # File: inventory_manager.py
 # ==============================================================================
+import json
+import os
+
+
+def load_inventory(filename):
+    """Load inventory from a JSON file."""
+
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r") as file:
+                inventory = json.load(file)
+
+            print(f"{filename} found.")
+            print("Inventory loaded successfully.")
+
+            return inventory
+
+        except (json.JSONDecodeError, OSError):
+            print("Unable to load inventory. Starting with empty inventory.")
+            return []
+
+    print(f"{filename} not found. Starting with empty inventory.")
+    return []
 
 
 def add_product(inventory):
@@ -90,30 +113,10 @@ def display_all(inventory):
 
 def main():
 
-    # At least three products stored as dictionaries in a list.
-    inventory = [
-        {
-            "id": "P001",
-            "name": "Laptop",
-            "price": 1200.00,
-            "stock": 15
-        },
-        {
-            "id": "P002",
-            "name": "Mouse",
-            "price": 25.50,
-            "stock": 40
-        },
-        {
-            "id": "P003",
-            "name": "Keyboard",
-            "price": 45.00,
-            "stock": 25
-        }
-    ]
+    filename = "inventory.json"
 
-    display_all(inventory)
-    add_product(inventory)
+    inventory = load_inventory(filename)
+
     display_all(inventory)
 
 

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Submission archives
+*.zip
+
+# Screenshots and evidence
+*.png
+
+# Git history snapshots (submitted separately)
+log.txt
+
+# IDE
+.vscode/
+.idea/

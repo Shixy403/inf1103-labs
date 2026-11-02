@@ -191,3 +191,56 @@ def search_product(inventory: Inventory):
 def display_all(inventory: Inventory):
     # delegate the display operation directly to the Inventory class
     inventory.display_all()
+
+
+
+def main():
+    filename = "inventory.json"
+
+    # instantiate the Inventory container object
+    inventory = Inventory()
+
+    # load saved products into the inventory object on startup
+    load_inventory(filename, inventory)
+
+    while True:
+        # print main options menu
+        print("\n----------- MENU -----------")
+        print("1. Display All Products")
+        print("2. Add Product")
+        print("3. Update Stock")
+        print("4. Search Product")
+        print("5. Save Inventory")
+        print("6. Exit")
+        print("----------------------------")
+
+        choice = input("Enter option: ").strip()
+
+        if choice == "1":
+            display_all(inventory)
+
+        elif choice == "2":
+            add_product(inventory)
+
+        elif choice == "3":
+            update_stock(inventory)
+
+        elif choice == "4":
+            search_product(inventory)
+
+        elif choice == "5":
+            save_inventory(filename, inventory)
+
+        elif choice == "6":
+            # auto-save inventory to disk on exit
+            save_inventory(filename, inventory)
+            print("Thank you for using Inventory Management System.")
+            print("Program terminated.")
+            break
+
+        else:
+            print("Invalid option. Please choose 1-6.")
+
+
+if __name__ == "__main__":
+    main()

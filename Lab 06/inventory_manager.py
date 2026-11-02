@@ -29,7 +29,7 @@ class Product:
     def get_stock(self):
         return self.__stock # getter for product stock
 
-    def set_stock(self, quantity: int):
+    def update_stock(self, quantity: int):
         self.__stock = quantity # setter for product stock
 
     def display_information(self):

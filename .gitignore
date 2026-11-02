@@ -23,3 +23,5 @@ log.txt
 # IDE
 .vscode/
 .idea/
+# Submission files (keep local, do not upload)
+submissions/

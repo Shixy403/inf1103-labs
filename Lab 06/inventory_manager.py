@@ -2,6 +2,9 @@
 # INF1103 Lab 6: Classes
 # File: inventory_manager.py
 # ==============================================================================
+import json
+import os
+
 
 
 class Product:
@@ -77,4 +80,114 @@ class Inventory:
     def get_all(self):
         # return the full list of Product objects (used when saving to JSON)
         return self.products
-    
+
+
+# Persistence Functions (JSON File Handling), not used in class for Single Responsibility Principle
+def save_inventory(filename, inventory: Inventory):
+    # build a list of dictionaries by calling .to_dict() on each Product object
+    data = [product.to_dict() for product in inventory.get_all()]
+
+    # write the list of product dictionaries into the JSON file
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+
+    print("Inventory saved successfully.")
+
+
+def load_inventory(filename, inventory: Inventory):
+    # check if the JSON file exists on disk
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r") as file:
+                data = json.load(file)
+
+            # recreate Product objects from loaded dictionaries and add to inventory
+            for item in data:
+                product = Product(
+                    item["id"],
+                    item["name"],
+                    item["price"],
+                    item["stock"]
+                )
+                inventory.add_product(product)
+
+            print(f"{filename} found.")
+            print("Inventory loaded successfully.")
+            return
+
+        except (json.JSONDecodeError, OSError):
+            print("Unable to load inventory. Starting with empty inventory.")
+            return
+
+    # if file does not exist, start fresh
+    print(f"{filename} not found. Starting with empty inventory.")
+
+
+
+def add_product(inventory: Inventory):
+    # prompt user for product details
+    product_id = input("Product ID: ").strip()
+    name = input("Product Name: ").strip()
+
+    try:
+        price = float(input("Price: "))
+        stock = int(input("Stock Quantity: "))
+    except ValueError:
+        print("Invalid price or stock quantity.")
+        return
+
+    # create a new instance of Product and add it to the Inventory collection
+    product = Product(product_id, name, price, stock)
+    inventory.add_product(product)
+    print("Product added successfully!")
+
+
+def update_stock(inventory: Inventory):
+    # prompt user for product ID to find the target object
+    product_id = input("Enter Product ID: ").strip()
+
+    # retrieve Product object from Inventory
+    product = inventory.search_product(product_id)
+
+    if product:
+        print("\nProduct Found:")
+        print("Name:", product.get_name())
+        print("Current Stock:", product.get_stock())
+
+        try:
+            new_stock = int(input("New Stock Quantity: "))
+        except ValueError:
+            print("Invalid stock quantity.")
+            return
+
+        # call update_stock method on the Product object to change its private state
+        product.update_stock(new_stock)
+        print("Stock updated successfully!")
+        return
+
+    print("Product not found.")
+
+
+def search_product(inventory: Inventory):
+    # prompt user for product ID to search
+    product_id = input("Enter Product ID: ").strip()
+
+    # query the inventory collection
+    product = inventory.search_product(product_id)
+
+    if product:
+        print("\nProduct Found")
+        print("-" * 48)
+        print("ID:", product.get_id())
+        print("Name:", product.get_name())
+        print(f"Price: ${product.get_price():.2f}")
+        print("Stock:", product.get_stock())
+        print("-" * 48)
+        return
+
+    print("Product not found.")
+
+
+def display_all(inventory: Inventory):
+    # delegate the display operation directly to the Inventory class
+    inventory.display_all()
